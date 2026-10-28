@@ -1,5 +1,4 @@
 import { BookCheck, Bug, FilePen, FileText, FolderSearch, Gavel, ListTree, NotebookPen, Search, SquareTerminal, Sparkle } from "lucide-react";
-import { ROLE_COLORS } from "@/lib/swarm-roles";
 import type { Ev, Row } from "@/desktop/src/swarm-panel";
 import { ToolCallCard, ToolCallGroup, type ToolCallStatus } from "../components/tool-call-card";
 
@@ -48,7 +47,6 @@ export function RunCard({ steps, running, title, onPause }: { steps: Row[]; runn
 	const calls = steps.filter((r): r is { call: Ev; result?: Ev } => "call" in r);
 	const notes = steps.filter((r): r is { note: Ev } => "note" in r).map((r) => r.note);
 	const first = calls[0]?.call ?? notes[0];
-	const role = first?.role ?? "agent";
 	const item = first?.item ?? "";
 	const broke = calls.filter((c) => failed(c.result)).length;
 	const status = running ? "Working" : calls.some((c) => !c.result) ? "Stopped" : broke ? `${broke} failed` : "Done";
@@ -60,9 +58,6 @@ export function RunCard({ steps, running, title, onPause }: { steps: Row[]; runn
 				{scale}
 			</style>
 			<div className="flex items-center gap-2">
-				<span className="shrink-0 font-medium capitalize" style={{ color: (ROLE_COLORS as Record<string, string>)[role] ?? "hsl(var(--muted-foreground))" }}>
-					{role}
-				</span>
 				{title || item ? <span className="min-w-0 truncate text-foreground">{title ?? `item ${item}`}</span> : null}
 				<span className={`shrink-0 rounded-full px-2 py-0.5 text-[12px] leading-4 ${tone}`}>{status}</span>
 				{running && onPause ? (
