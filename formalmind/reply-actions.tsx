@@ -1,4 +1,4 @@
-import { MessageActions } from "../components/message-actions";
+import { MessageActions } from "../components/message-actions-clean";
 
 /** Under an agent's reply: AffectUI's Message Actions with Copy and thumbs up or down (with a reason on down). */
 export function ReplyActions({ text }: { text: string }) {

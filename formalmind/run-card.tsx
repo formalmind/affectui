@@ -2,33 +2,33 @@ import { BookCheck, Bug, FilePen, FileText, FolderSearch, Gavel, ListTree, Noteb
 import { useState } from "react";
 import type { Ev, Row } from "@/desktop/src/swarm-panel";
 import { ROLE_COLORS, roleName } from "@/lib/swarm-roles";
-import { AgentSteering, type SteerNote, type SteerStep } from "../components/agent-steering";
-import { AgentTree, type TreeAgent, type TreeAgentStatus } from "../components/agent-tree";
-import { ToolCallCard, ToolCallGroup, type ToolCallStatus } from "../components/tool-call-card";
+import { AgentSteering, type SteerNote, type SteerStep } from "../components/agent-steering-clean";
+import { AgentTree, type TreeAgent, type TreeAgentStatus } from "../components/agent-tree-clean";
+import { ToolCallCard, ToolCallGroup, type ToolCallStatus } from "../components/tool-call-card-clean";
 
 /** The chat's type scale for the tool cards: body text 14px like the messages, labels 12px like an agent's name. */
 const scale = /* css */ `
 .fm-run { font-size: 14px; line-height: 20px; }
-.fm-run .ui-tc-group__label, .fm-run .ui-tc-group__failed, .fm-run .ui-tc-group__time,
-.fm-run .ui-tc__summary, .fm-run .ui-tc__error, .fm-run .ui-tc__error-text { font-size: 14px; line-height: 20px; }
-.fm-run .ui-tc__name { font-size: 13px; line-height: 20px; }
-.fm-run .ui-tc__status, .fm-run .ui-tc__time, .fm-run .ui-tc__label { font-size: 12px; line-height: 16px; }
-.fm-run .ui-tc__code { font-size: 12px; line-height: 18px; }
+.fm-run .ui-tcc-group__label, .fm-run .ui-tcc-group__failed, .fm-run .ui-tcc-group__time,
+.fm-run .ui-tcc__summary, .fm-run .ui-tcc__error, .fm-run .ui-tcc__error-text { font-size: 14px; line-height: 20px; }
+.fm-run .ui-tcc__name { font-size: 13px; line-height: 20px; }
+.fm-run .ui-tcc__status, .fm-run .ui-tcc__time, .fm-run .ui-tcc__label { font-size: 12px; line-height: 16px; }
+.fm-run .ui-tcc__code { font-size: 12px; line-height: 18px; }
 /* Each step one plain line ("Ran a command ▾"): no box, no icon tile, no mono name; it opens to its details. */
-.fm-run .ui-tc { background: none; box-shadow: none; border-radius: 0; }
-.fm-run .ui-tc__head { padding: 2px 0; min-height: 0; }
+.fm-run .ui-tcc { background: none; box-shadow: none; border-radius: 0; }
+.fm-run .ui-tcc__head { padding: 2px 0; min-height: 0; }
 /* The group line keeps its stack of tool icons; the step lines have none. */
-.fm-run .ui-tc__head .ui-tc__icon { display: none; }
-.fm-run .ui-tc__name { font-family: inherit; color: hsl(var(--muted-foreground)); }
-.fm-run .ui-tc__head:hover .ui-tc__name { color: hsl(var(--foreground)); }
+.fm-run .ui-tcc__head .ui-tcc__icon { display: none; }
+.fm-run .ui-tcc__name { font-family: inherit; color: hsl(var(--muted-foreground)); }
+.fm-run .ui-tcc__head:hover .ui-tcc__name { color: hsl(var(--foreground)); }
 /* A failed step: "Failed" on its line, and opened, its details in red instead of a separate error box. */
-.fm-run .ui-tc[data-status="error"] .ui-tc__error { display: none; }
-.fm-run .ui-tc[data-status="error"] .ui-tc__code { background: rgb(220 38 38 / 0.06); color: rgb(185 28 28); }
+.fm-run .ui-tcc[data-status="error"] .ui-tcc__error { display: none; }
+.fm-run .ui-tcc[data-status="error"] .ui-tcc__code { background: rgb(220 38 38 / 0.06); color: rgb(185 28 28); }
 /* An opened step has no line between its row and its details. */
-.fm-run .ui-tc__sections { border-top: 0; padding-top: 4px; }
+.fm-run .ui-tcc__sections { border-top: 0; padding-top: 4px; }
 /* No hover background on a step or the group line: hover only darkens the text. */
-.fm-run .ui-tc__head, .fm-run .ui-tc__head:hover, .fm-run .ui-tc-group__head, .fm-run .ui-tc-group__head:hover, .fm-run .ui-tc:hover { background: none !important; box-shadow: none !important; }
-.fm-run .ui-tc-group__list { gap: 0; padding-left: 0; }
+.fm-run .ui-tcc__head, .fm-run .ui-tcc__head:hover, .fm-run .ui-tcc-group__head, .fm-run .ui-tcc-group__head:hover, .fm-run .ui-tcc:hover { background: none !important; box-shadow: none !important; }
+.fm-run .ui-tcc-group__list { gap: 0; padding-left: 0; }
 `;
 
 /** What a step did, in words: the line it shows before it is opened. */
@@ -169,17 +169,17 @@ function StepGroup({ calls, running }: { calls: Call[]; running: boolean }) {
 
 /** The tree's cards in the chat's type: names in their role colour, no avatar tile, the time beside the name. */
 const team = /* css */ `
-.fm-team .ui-agt { --ui-agt-card-w: 200px; }
-.fm-team .ui-agt__avatar, .fm-team .ui-agt__cost, .fm-team .ui-agt__sum-cost { display: none; }
-.fm-team .ui-agt__name { font-weight: 400; }
+.fm-team .ui-agtc { --ui-agtc-card-w: 200px; }
+.fm-team .ui-agtc__avatar, .fm-team .ui-agtc__cost, .fm-team .ui-agtc__sum-cost { display: none; }
+.fm-team .ui-agtc__name { font-weight: 400; }
 /* With the cost hidden, a card's footer is only its fold button: without one, no footer. */
-.fm-team .ui-agt__meta:not(:has(.ui-agt__fold)) { display: none; }
+.fm-team .ui-agtc__meta:not(:has(.ui-agtc__fold)) { display: none; }
 ${Object.entries(ROLE_COLORS)
-	.map(([role, color]) => `.fm-team .ui-agt__hang[aria-label^="${roleName(role)}:"] > .ui-agt__node .ui-agt__name { color: ${color}; }`)
+	.map(([role, color]) => `.fm-team .ui-agtc__hang[aria-label^="${roleName(role)}:"] > .ui-agtc__node .ui-agtc__name { color: ${color}; }`)
 	.join("\n")}
 /* The agent at work: its name in its role colour. */
-.fm-steer .ui-st__agent { color: var(--fm-role); }
-.fm-steer .ui-st__card, .fm-steer .ui-st { max-width: none; }
+.fm-steer .ui-stc__agent { color: var(--fm-role); }
+.fm-steer .ui-stc__card, .fm-steer .ui-stc { max-width: none; }
 `;
 
 /**

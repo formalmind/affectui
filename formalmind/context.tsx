@@ -1,5 +1,5 @@
 import type { ContextUse } from "@/desktop/src/context-panel";
-import { ContextWindow, type ContextPart } from "../components/context-window";
+import { ContextWindow, type ContextPart } from "../components/context-window-clean";
 
 /**
  * One agent's context window on AffectUI's Context Window: the system prompt and the tools (locked), the task, and
