@@ -70,7 +70,7 @@ const theme = /* css */ `
 .ui-chat-composer.fm .ui-chat-composer__model-name { max-width: 14rem; }
 /* Menu rows as tight as the app's menus. */
 .ui-chat-composer.fm .ui-chat-composer__option { min-height: 32px; padding-block: 6px; }
-.ui-chat-composer.fm .fm-cc-play { width: 0; height: 0; margin-left: 12%; border-style: solid; border-width: 22% 0 22% 36%; border-color: transparent transparent transparent var(--ui-cc-on-ink); }
+.ui-chat-composer.fm .fm-cc-play { width: 46%; height: 46%; margin-left: 8%; fill: var(--ui-cc-on-ink); }
 .ui-chat-composer.fm .fm-cc-stop { width: 38%; height: 38%; border-radius: 2px; background: var(--ui-cc-on-ink); }
 `;
 
@@ -191,7 +191,7 @@ export function Composer({ value, onChange, onSubmit, onStop, isLoading, allowEm
 					<div className="ui-chat-composer__toolbar ui-chat-composer__toolbar--end">
 						{modelPicker ? <Pill picker={modelPicker} container={body} /> : null}
 						<button type="button" className="ui-chat-composer__send" data-stop={stop || undefined} aria-label={sendTitle ?? (stop ? "Stop" : "Send")} title={sendTitle} disabled={!canSend} onClick={go}>
-							{stop ? <span className="fm-cc-stop" /> : start ? <span className="fm-cc-play" /> : <ArrowUpIcon />}
+							{stop ? <span className="fm-cc-stop" /> : start ? <svg className="fm-cc-play" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 2.8v10.4a.8.8 0 0 0 1.2.7l8.2-5.2a.8.8 0 0 0 0-1.4L5.7 2.1a.8.8 0 0 0-1.2.7Z" /></svg> : <ArrowUpIcon />}
 						</button>
 					</div>
 				</div>
