@@ -1,9 +1,30 @@
+import { BookCheck, Bug, FilePen, FileText, FolderSearch, Gavel, ListTree, NotebookPen, Search, SquareTerminal, Sparkle } from "lucide-react";
 import { ROLE_COLORS } from "@/lib/swarm-roles";
 import type { Ev, Row } from "@/desktop/src/swarm-panel";
 import { ToolCallCard, ToolCallGroup, type ToolCallStatus } from "../components/tool-call-card";
 
 /** A step that failed: a command's non-zero exit or a tool's error (as the app's own run card decides). */
 const failed = (r?: Ev) => Boolean(r && /^(exit [1-9]|error:)/m.test(r.text));
+
+/** Each tool's icon in its card and in the group's stack (AffectUI's default is a wrench). */
+const ICONS: Record<string, typeof Search> = {
+	run: SquareTerminal,
+	read_file: FileText,
+	write_file: FilePen,
+	search: Search,
+	find: FolderSearch,
+	functions: ListTree,
+	function: ListTree,
+	record_finding: NotebookPen,
+	record_property: BookCheck,
+	record_report: NotebookPen,
+	report_bug: Bug,
+	verdict: Gavel,
+};
+const iconOf = (tool: string) => {
+	const Icon = ICONS[tool] ?? Sparkle;
+	return <Icon className="size-3.5" strokeWidth={2} />;
+};
 
 /** The error line a failed step shows: its first line that says so. */
 const errorOf = (r: Ev) => r.text.split("\n").find((l) => /^(exit [1-9]|error:)/.test(l)) ?? r.text.split("\n")[0];
@@ -48,6 +69,7 @@ export function RunCard({ steps, running, title, onPause }: { steps: Row[]; runn
 							<ToolCallCard
 								key={i}
 								name={tool}
+								icon={iconOf(tool)}
 								summary={rest.join(" ")}
 								status={state}
 								args={c.call.text}

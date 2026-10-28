@@ -444,7 +444,7 @@ function clippingFrame(from: HTMLElement) {
 
 /* ---------- Model picker: opens upward, or downward when there is no room above ---------- */
 
-function ModelMenu({
+export function ModelMenu({
   open,
   models,
   selected,
@@ -749,7 +749,7 @@ const MicIcon = () => (
   </svg>
 );
 
-const ChevronIcon = () => (
+export const ChevronIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
     <path
       d="M18 9.00005C18 9.00005 13.5811 15 12 15C10.4188 15 6 9 6 9"
@@ -761,7 +761,7 @@ const ChevronIcon = () => (
   </svg>
 );
 
-const ArrowUpIcon = () => (
+export const ArrowUpIcon = () => (
   <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
     <path d="M12 5.5V19" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
     <path
@@ -989,7 +989,7 @@ const ChatGPTLogo = () => (
 
 /* ---------- Styles ---------- */
 
-const css = /* css */ `
+export const css = /* css */ `
 /* Chat Composer – authored in design units (--u), so it scales with the composer width */
 .ui-chat-composer {
   --ui-cc-tray: #f0f0f0;

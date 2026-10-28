@@ -1,0 +1,186 @@
+import { useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent } from "react";
+import { ArrowUpIcon, ChevronIcon, ModelMenu, css, type ChatModel } from "../components/chat-composer";
+
+type Picker = { value: string; options: { value: string; label: string }[]; onChange: (value: string) => void; disabled?: boolean };
+
+/** The subset of the app's `ChatComposer` props the swarm chat passes (components/chat-composer.tsx). */
+export type ComposerProps = {
+	value: string;
+	onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+	onSubmit: () => void;
+	onStop: () => void;
+	/** A session is running: with nothing typed, ↑ becomes Stop. */
+	isLoading: boolean;
+	/** The send button works with nothing typed (it starts a session). */
+	allowEmpty?: boolean;
+	sendDisabled?: boolean;
+	sendTitle?: string;
+	placeholder?: string;
+	modelPicker?: Picker;
+	effortPicker?: Picker;
+	/** The chips under the card: Start or Resume, the item in focus, attachments. */
+	context?: React.ReactNode;
+	/** More controls beside the Thinking pill (Draft reply). */
+	extra?: React.ReactNode;
+	textareaRef?: React.Ref<HTMLTextAreaElement>;
+};
+
+/** AffectUI's colours, taken from the app's theme so the composer follows light and dark mode. */
+const theme = /* css */ `
+.ui-chat-composer.fm {
+  --ui-cc-tray: hsl(var(--muted));
+  --ui-cc-card: hsl(var(--card));
+  --ui-cc-line: hsl(var(--border));
+  --ui-cc-ink: hsl(var(--foreground));
+  --ui-cc-ink-muted: hsl(var(--muted-foreground));
+  --ui-cc-ink-hover: hsl(var(--foreground));
+  --ui-cc-ink-faint: hsl(var(--muted-foreground));
+  --ui-cc-placeholder: hsl(var(--muted-foreground) / 0.7);
+  --ui-cc-on-ink: hsl(var(--background));
+  --ui-cc-menu-fill: hsl(var(--accent));
+  --ui-cc-square-hover: hsl(var(--accent));
+  --ui-cc-focus: hsl(var(--ring) / 0.35);
+  max-width: none;
+}
+.ui-chat-composer.fm .fm-cc-context {
+  position: absolute;
+  left: calc(84 * var(--u) + var(--ui-cc-inset));
+  right: calc(84 * var(--u) + var(--ui-cc-inset));
+  top: calc((var(--ui-cc-card-h) + 20) * var(--u) + var(--ui-cc-inset) * 1.5);
+  height: calc(130 * var(--u));
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  font-size: 12px;
+  transition: top var(--ui-cc-swap) var(--ui-cc-ease-swap);
+}
+.ui-chat-composer.fm .ui-chat-composer__send[data-stop] { border-radius: calc(24 * var(--u)); }
+.ui-chat-composer.fm .fm-cc-play { width: 0; height: 0; margin-left: 12%; border-style: solid; border-width: 22% 0 22% 36%; border-color: transparent transparent transparent currentColor; }
+.ui-chat-composer.fm .fm-cc-stop { width: 42%; height: 42%; border-radius: 2px; background: currentColor; }
+`;
+
+const asModel = (o: { value: string; label: string }): ChatModel => ({ id: o.value, name: o.label, description: "" });
+
+/** A model or Thinking pill with AffectUI's menu. */
+function Pill({ picker, container }: { picker: Picker; container: React.RefObject<HTMLElement | null> }) {
+	const [open, setOpen] = useState(false);
+	const button = useRef<HTMLButtonElement>(null);
+	const models = picker.options.map(asModel);
+	const selected = models.find((m) => m.id === picker.value) ?? models[0];
+	if (!selected) return null;
+	return (
+		<>
+			<button
+				ref={button}
+				type="button"
+				className="ui-chat-composer__model"
+				aria-haspopup="listbox"
+				aria-expanded={open}
+				disabled={picker.disabled}
+				onClick={() => setOpen((o) => !o)}
+			>
+				<span className="ui-chat-composer__model-face">
+					<span className="ui-chat-composer__label ui-chat-composer__model-name" title={selected.name}>
+						{selected.name}
+					</span>
+				</span>
+				<span className="ui-chat-composer__icon ui-chat-composer__icon--chevron" aria-hidden="true">
+					<ChevronIcon />
+				</span>
+			</button>
+			<ModelMenu
+				open={open}
+				models={models}
+				selected={selected}
+				anchor={button}
+				container={container}
+				onPick={(m) => {
+					setOpen(false);
+					picker.onChange(m.id);
+					button.current?.focus();
+				}}
+				onClose={(refocus) => {
+					setOpen(false);
+					if (refocus) button.current?.focus();
+				}}
+			/>
+		</>
+	);
+}
+
+/**
+ * The swarm chat's composer on AffectUI's Chat Composer: the same card, pills and menu, driven by the app's props
+ * (a controlled value, Enter to send, ↑ that starts or sends and is Stop while a session runs with nothing typed),
+ * with the context chips in the strip under the card.
+ */
+export function Composer({ value, onChange, onSubmit, onStop, isLoading, allowEmpty, sendDisabled, sendTitle, placeholder, modelPicker, effortPicker, context, extra, textareaRef }: ComposerProps) {
+	const body = useRef<HTMLElement>(null);
+	const own = useRef<HTMLTextAreaElement | null>(null);
+	const [lines, setLines] = useState(1);
+	useLayoutEffect(() => {
+		const el = own.current;
+		if (!el) return;
+		const prev = el.style.height;
+		el.style.height = "0px";
+		const content = el.scrollHeight;
+		el.style.height = prev;
+		const lineHeight = parseFloat(getComputedStyle(el).lineHeight) || 1;
+		setLines(Math.min(2, Math.max(1, Math.round(content / lineHeight))));
+	}, [value]);
+	const typed = value.trim().length > 0;
+	// One button for the session: Start (nothing running, nothing typed), Send, or Stop (running, nothing typed).
+	const stop = isLoading && !typed;
+	const start = !isLoading && !typed;
+	const canSend = !sendDisabled && (stop || typed || allowEmpty);
+	const go = () => {
+		if (!canSend) return;
+		if (stop) onStop();
+		else onSubmit();
+	};
+	const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+		if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
+			e.preventDefault();
+			if (typed || allowEmpty) go();
+		}
+	};
+	const focus = (e: PointerEvent<HTMLDivElement>) => {
+		if ((e.target as HTMLElement).closest("button, textarea, input")) return;
+		e.preventDefault();
+		own.current?.focus();
+	};
+	const setRef = (el: HTMLTextAreaElement | null) => {
+		own.current = el;
+		if (typeof textareaRef === "function") textareaRef(el);
+		else if (textareaRef) (textareaRef as React.RefObject<HTMLTextAreaElement | null>).current = el;
+	};
+	return (
+		<div className="ui-chat-composer fm">
+			<style href="ui-chat-composer" precedence="default">
+				{css}
+			</style>
+			<style href="fm-chat-composer" precedence="default">
+				{theme}
+			</style>
+			<section ref={body} className="ui-chat-composer__body" data-apps="idle" data-approval="idle" style={{ "--ui-cc-grow": (lines - 1) * 106.424 } as CSSProperties} aria-label="Message composer">
+				<div className="ui-chat-composer__tray">{context ? <div className="fm-cc-context">{context}</div> : null}</div>
+				<div className="ui-chat-composer__card" onPointerDown={focus}>
+					<textarea ref={setRef} className="ui-chat-composer__message" value={value} onChange={onChange} onKeyDown={onKeyDown} placeholder={placeholder} aria-label="Message" spellCheck={false} dir="auto" />
+					<div className="ui-chat-composer__draft" aria-hidden="true" dir="auto">
+						{value}
+					</div>
+					<div className="ui-chat-composer__toolbar">
+						{effortPicker ? <Pill picker={effortPicker} container={body} /> : null}
+						{extra}
+					</div>
+					<div className="ui-chat-composer__toolbar ui-chat-composer__toolbar--end">
+						{modelPicker ? <Pill picker={modelPicker} container={body} /> : null}
+						<button type="button" className="ui-chat-composer__send" data-stop={stop || undefined} aria-label={sendTitle ?? (stop ? "Stop" : "Send")} title={sendTitle} disabled={!canSend} onClick={go}>
+							{stop ? <span className="fm-cc-stop" /> : start ? <span className="fm-cc-play" /> : <ArrowUpIcon />}
+						</button>
+					</div>
+				</div>
+			</section>
+		</div>
+	);
+}
