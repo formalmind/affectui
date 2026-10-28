@@ -1,3 +1,4 @@
+import { createPortal } from "react-dom";
 import { useLayoutEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent } from "react";
 import { ArrowUpIcon, ChevronIcon, ModelMenu, css, type ChatModel } from "../components/chat-composer";
 
@@ -55,6 +56,12 @@ const theme = /* css */ `
   font-size: 12px;
   transition: top var(--ui-cc-swap) var(--ui-cc-ease-swap);
 }
+/* The app's own text size (the file tree's: 14px on 20px lines), not AffectUI's width-scaled type. */
+.ui-chat-composer.fm .ui-chat-composer__message,
+.ui-chat-composer.fm .ui-chat-composer__draft { font-size: 14px; line-height: 20px; letter-spacing: normal; }
+.ui-chat-composer.fm .ui-chat-composer__label,
+.ui-chat-composer.fm .ui-chat-composer__option-name { font-size: 14px; line-height: 20px; letter-spacing: normal; }
+.ui-chat-composer.fm .fm-cc-context { font-size: 14px; }
 .ui-chat-composer.fm .ui-chat-composer__send[data-stop] { border-radius: calc(24 * var(--u)); }
 .ui-chat-composer.fm .fm-cc-play { width: 0; height: 0; margin-left: 12%; border-style: solid; border-width: 22% 0 22% 36%; border-color: transparent transparent transparent currentColor; }
 .ui-chat-composer.fm .fm-cc-stop { width: 42%; height: 42%; border-radius: 2px; background: currentColor; }
@@ -89,7 +96,8 @@ function Pill({ picker, container }: { picker: Picker; container: React.RefObjec
 					<ChevronIcon />
 				</span>
 			</button>
-			<ModelMenu
+			{/* Outside the card, as AffectUI places it: the card clips, so a menu inside it is cut off. */}
+			{container.current ? createPortal(<ModelMenu
 				open={open}
 				models={models}
 				selected={selected}
@@ -104,7 +112,7 @@ function Pill({ picker, container }: { picker: Picker; container: React.RefObjec
 					setOpen(false);
 					if (refocus) button.current?.focus();
 				}}
-			/>
+			/>, container.current) : null}
 		</>
 	);
 }
