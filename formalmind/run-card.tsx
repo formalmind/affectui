@@ -20,6 +20,8 @@ const scale = /* css */ `
 /* A failed step: "Failed" on its line, and opened, its details in red instead of a separate error box. */
 .fm-run .ui-tc[data-status="error"] .ui-tc__error { display: none; }
 .fm-run .ui-tc[data-status="error"] .ui-tc__code { background: rgb(220 38 38 / 0.06); color: rgb(185 28 28); }
+/* An opened step has no line between its row and its details. */
+.fm-run .ui-tc__sections { border-top: 0; padding-top: 4px; }
 /* No hover background on a step or the group line: hover only darkens the text. */
 .fm-run .ui-tc__head, .fm-run .ui-tc__head:hover, .fm-run .ui-tc-group__head, .fm-run .ui-tc-group__head:hover, .fm-run .ui-tc:hover { background: none !important; box-shadow: none !important; }
 .fm-run .ui-tc-group__list { gap: 0; padding-left: 0; }
