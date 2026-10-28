@@ -64,7 +64,7 @@ export function RunCard({ steps, running, title, onPause }: { steps: Row[]; runn
 					{role}
 				</span>
 				{title || item ? <span className="min-w-0 truncate text-foreground">{title ?? `item ${item}`}</span> : null}
-				<span className={`shrink-0 rounded px-1.5 py-0.5 text-[11px] ${tone}`}>{status}</span>
+				<span className={`shrink-0 rounded-full px-2 py-0.5 text-[12px] leading-4 ${tone}`}>{status}</span>
 				{running && onPause ? (
 					<button type="button" onClick={onPause} className="ml-auto h-6 shrink-0 rounded-md border bg-background px-2 text-[11px] hover:bg-muted">
 						Pause
