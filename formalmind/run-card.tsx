@@ -3,6 +3,16 @@ import { ROLE_COLORS } from "@/lib/swarm-roles";
 import type { Ev, Row } from "@/desktop/src/swarm-panel";
 import { ToolCallCard, ToolCallGroup, type ToolCallStatus } from "../components/tool-call-card";
 
+/** The chat's type scale for the tool cards: body text 14px like the messages, labels 12px like an agent's name. */
+const scale = /* css */ `
+.fm-run { font-size: 14px; line-height: 20px; }
+.fm-run .ui-tc-group__label, .fm-run .ui-tc-group__failed, .fm-run .ui-tc-group__time,
+.fm-run .ui-tc__summary, .fm-run .ui-tc__error, .fm-run .ui-tc__error-text { font-size: 14px; line-height: 20px; }
+.fm-run .ui-tc__name { font-size: 13px; line-height: 20px; }
+.fm-run .ui-tc__status, .fm-run .ui-tc__time, .fm-run .ui-tc__label { font-size: 12px; line-height: 16px; }
+.fm-run .ui-tc__code { font-size: 12px; line-height: 18px; }
+`;
+
 /** A step that failed: a command's non-zero exit or a tool's error (as the app's own run card decides). */
 const failed = (r?: Ev) => Boolean(r && /^(exit [1-9]|error:)/m.test(r.text));
 
@@ -45,7 +55,10 @@ export function RunCard({ steps, running, title, onPause }: { steps: Row[]; runn
 	const tone = running ? "text-violet-700 dark:text-violet-300 bg-violet-500/15" : broke ? "text-red-700 dark:text-red-400 bg-red-500/15" : calls.some((c) => !c.result) ? "text-muted-foreground bg-muted" : "text-emerald-700 dark:text-emerald-400 bg-emerald-500/15";
 	const note = notes.at(-1)?.text;
 	return (
-		<div className="space-y-1.5 text-[13px]">
+		<div className="fm-run space-y-1.5">
+			<style href="fm-run-card" precedence="default">
+				{scale}
+			</style>
 			<div className="flex items-center gap-2">
 				<span className="shrink-0 font-medium capitalize" style={{ color: (ROLE_COLORS as Record<string, string>)[role] ?? "hsl(var(--muted-foreground))" }}>
 					{role}
