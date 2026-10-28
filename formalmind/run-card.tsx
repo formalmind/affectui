@@ -1,0 +1,66 @@
+import { ROLE_COLORS } from "@/lib/swarm-roles";
+import type { Ev, Row } from "@/desktop/src/swarm-panel";
+import { ToolCallCard, ToolCallGroup, type ToolCallStatus } from "../components/tool-call-card";
+
+/** A step that failed: a command's non-zero exit or a tool's error (as the app's own run card decides). */
+const failed = (r?: Ev) => Boolean(r && /^(exit [1-9]|error:)/m.test(r.text));
+
+/** The error line a failed step shows: its first line that says so. */
+const errorOf = (r: Ev) => r.text.split("\n").find((l) => /^(exit [1-9]|error:)/.test(l)) ?? r.text.split("\n")[0];
+
+/**
+ * One agent run on AffectUI's Tool Call Card: who and on what, its status, then the steps as one group ("Used 6
+ * tools · 2 failed · 1m 05s") that opens to a card per call. A failed card opens on its own and shows its error.
+ * The agent's latest note sits under the header. Same props as the app's own `Steps`.
+ */
+export function RunCard({ steps, running, title, onPause }: { steps: Row[]; running: boolean; title?: string; onPause?: () => void }) {
+	const calls = steps.filter((r): r is { call: Ev; result?: Ev } => "call" in r);
+	const notes = steps.filter((r): r is { note: Ev } => "note" in r).map((r) => r.note);
+	const first = calls[0]?.call ?? notes[0];
+	const role = first?.role ?? "agent";
+	const item = first?.item ?? "";
+	const broke = calls.filter((c) => failed(c.result)).length;
+	const status = running ? "Working" : calls.some((c) => !c.result) ? "Stopped" : broke ? `${broke} failed` : "Done";
+	const tone = running ? "text-violet-700 dark:text-violet-300 bg-violet-500/15" : broke ? "text-red-700 dark:text-red-400 bg-red-500/15" : calls.some((c) => !c.result) ? "text-muted-foreground bg-muted" : "text-emerald-700 dark:text-emerald-400 bg-emerald-500/15";
+	const note = notes.at(-1)?.text;
+	return (
+		<div className="space-y-1.5 text-[13px]">
+			<div className="flex items-center gap-2">
+				<span className="shrink-0 font-medium capitalize" style={{ color: (ROLE_COLORS as Record<string, string>)[role] ?? "hsl(var(--muted-foreground))" }}>
+					{role}
+				</span>
+				{title || item ? <span className="min-w-0 truncate text-foreground">{title ?? `item ${item}`}</span> : null}
+				<span className={`shrink-0 rounded px-1.5 py-0.5 text-[11px] ${tone}`}>{status}</span>
+				{running && onPause ? (
+					<button type="button" onClick={onPause} className="ml-auto h-6 shrink-0 rounded-md border bg-background px-2 text-[11px] hover:bg-muted">
+						Pause
+					</button>
+				) : null}
+			</div>
+			{note ? <p className="line-clamp-2 text-[12px] text-muted-foreground">{note}</p> : null}
+			{calls.length ? (
+				<ToolCallGroup runningLabel="Working…" defaultOpen={running || broke > 0}>
+					{calls.map((c, i) => {
+						const [tool, ...rest] = c.call.text.split(" ");
+						const bad = failed(c.result);
+						const state: ToolCallStatus = !c.result ? (running && i === calls.length - 1 ? "running" : "error") : bad ? "error" : "success";
+						return (
+							<ToolCallCard
+								key={i}
+								name={tool}
+								summary={rest.join(" ")}
+								status={state}
+								args={c.call.text}
+								result={c.result?.text}
+								error={bad && c.result ? errorOf(c.result) : !c.result && state === "error" ? "no result: the session stopped before it finished" : undefined}
+								startedAt={c.call.at}
+								duration={c.call.at && c.result?.at ? c.result.at - c.call.at : undefined}
+								defaultOpen={state === "running"}
+							/>
+						);
+					})}
+				</ToolCallGroup>
+			) : null}
+		</div>
+	);
+}
