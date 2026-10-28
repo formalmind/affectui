@@ -17,6 +17,10 @@ const scale = /* css */ `
 .fm-run .ui-tc__head .ui-tc__icon { display: none; }
 .fm-run .ui-tc__name { font-family: inherit; color: hsl(var(--muted-foreground)); }
 .fm-run .ui-tc__head:hover .ui-tc__name { color: hsl(var(--foreground)); }
+/* A failed step says so by its colour: its line in red, no "Failed" label (the group line counts the failures). */
+.fm-run .ui-tc[data-status="error"] .ui-tc__status { display: none; }
+.fm-run .ui-tc[data-status="error"] .ui-tc__name,
+.fm-run .ui-tc[data-status="error"] .ui-tc__head:hover .ui-tc__name { color: rgb(220 38 38); }
 /* No hover background on a step or the group line: hover only darkens the text. */
 .fm-run .ui-tc__head, .fm-run .ui-tc__head:hover, .fm-run .ui-tc-group__head, .fm-run .ui-tc-group__head:hover, .fm-run .ui-tc:hover { background: none !important; box-shadow: none !important; }
 .fm-run .ui-tc-group__list { gap: 0; padding-left: 0; }
