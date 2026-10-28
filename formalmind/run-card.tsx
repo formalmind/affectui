@@ -13,7 +13,8 @@ const scale = /* css */ `
 /* Each step one plain line ("Ran a command ▾"): no box, no icon tile, no mono name; it opens to its details. */
 .fm-run .ui-tc { background: none; box-shadow: none; border-radius: 0; }
 .fm-run .ui-tc__head { padding: 2px 0; min-height: 0; }
-.fm-run .ui-tc__icon, .fm-run .ui-tc-group__stack { display: none; }
+/* The group line keeps its stack of tool icons; the step lines have none. */
+.fm-run .ui-tc__head .ui-tc__icon { display: none; }
 .fm-run .ui-tc__name { font-family: inherit; color: hsl(var(--muted-foreground)); }
 .fm-run .ui-tc__head:hover .ui-tc__name { color: hsl(var(--foreground)); }
 /* No hover background on a step or the group line: hover only darkens the text. */
