@@ -64,6 +64,10 @@ const theme = /* css */ `
 .ui-chat-composer.fm .fm-cc-context { font-size: 14px; }
 /* The app's own controls in the toolbar (Draft reply) keep the same size: AffectUI's buttons inherit its larger type. */
 .ui-chat-composer.fm .ui-chat-composer__toolbar > :not(.ui-chat-composer__model):not(.ui-chat-composer__send) { font-size: 14px; line-height: 20px; }
+/* Smaller than AffectUI's default: its unit grows with the width up to 0.27px; here up to 0.2px. */
+.ui-chat-composer.fm .ui-chat-composer__body { --u: min(calc(100cqw / var(--ui-cc-span, 1900)), 0.2px); }
+/* A pill fits its whole name (a model's), rather than AffectUI's width cut to the unit. */
+.ui-chat-composer.fm .ui-chat-composer__model-name { max-width: 14rem; }
 .ui-chat-composer.fm .ui-chat-composer__send[data-stop] { border-radius: calc(24 * var(--u)); }
 .ui-chat-composer.fm .fm-cc-play { width: 0; height: 0; margin-left: 12%; border-style: solid; border-width: 22% 0 22% 36%; border-color: transparent transparent transparent currentColor; }
 .ui-chat-composer.fm .fm-cc-stop { width: 42%; height: 42%; border-radius: 2px; background: currentColor; }
