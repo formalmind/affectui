@@ -62,6 +62,8 @@ const theme = /* css */ `
 .ui-chat-composer.fm .ui-chat-composer__label,
 .ui-chat-composer.fm .ui-chat-composer__option-name { font-size: 14px; line-height: 20px; letter-spacing: normal; }
 .ui-chat-composer.fm .fm-cc-context { font-size: 14px; }
+/* The app's own controls in the toolbar (Draft reply) keep the same size: AffectUI's buttons inherit its larger type. */
+.ui-chat-composer.fm .ui-chat-composer__toolbar > :not(.ui-chat-composer__model):not(.ui-chat-composer__send) { font-size: 14px; line-height: 20px; }
 .ui-chat-composer.fm .ui-chat-composer__send[data-stop] { border-radius: calc(24 * var(--u)); }
 .ui-chat-composer.fm .fm-cc-play { width: 0; height: 0; margin-left: 12%; border-style: solid; border-width: 22% 0 22% 36%; border-color: transparent transparent transparent currentColor; }
 .ui-chat-composer.fm .fm-cc-stop { width: 42%; height: 42%; border-radius: 2px; background: currentColor; }
