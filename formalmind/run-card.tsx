@@ -16,6 +16,8 @@ const scale = /* css */ `
 .fm-run .ui-tc__icon, .fm-run .ui-tc-group__stack { display: none; }
 .fm-run .ui-tc__name { font-family: inherit; color: hsl(var(--muted-foreground)); }
 .fm-run .ui-tc__head:hover .ui-tc__name { color: hsl(var(--foreground)); }
+/* No hover background on a step or the group line: hover only darkens the text. */
+.fm-run .ui-tc__head, .fm-run .ui-tc__head:hover, .fm-run .ui-tc-group__head, .fm-run .ui-tc-group__head:hover, .fm-run .ui-tc:hover { background: none !important; box-shadow: none !important; }
 .fm-run .ui-tc-group__list { gap: 0; padding-left: 0; }
 `;
 
