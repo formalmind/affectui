@@ -1,0 +1,141 @@
+# affectUI – components
+
+Every file is a single, self-contained React component (React is the only dependency).
+Copy a file into your project, e.g. `components/ui/`, and import it from there.
+Some files import another affectUI component from `@/components/ui/<name>` – copy that one alongside.
+
+- **Agent Cursors** (`agent-cursors.tsx`) – Agents working in a document like teammates in a multiplayer editor – live pointers with names, suggestions typed letter by letter, images they resize, code they fix and comments beside the page
+- **Agent Cursors (Clean)** (`agent-cursors-clean.tsx`) – Agents working in a document like teammates in a multiplayer editor – live pointers with names, suggestions typed letter by letter, images they resize, code they fix and comments beside the page
+- **Agent Graph** (`agent-graph.tsx`) – Agents and the tools they call as a living network – a pulse along the link for every call and its answer, busy links growing thicker, agents that breathe while they work and turn amber when they need you
+- **Agent Graph (Clean)** (`agent-graph-clean.tsx`) – Agents and the tools they call as a living network – a pulse along the link for every call and its answer, busy links growing thicker, agents that breathe while they work and turn amber when they need you
+- **Agent Inbox** (`agent-inbox.tsx`) – All your background agent tasks in one calm list – live clocks and status tags, filter tabs with rolling counts, rows that unfold to the last steps with Approve, Reject, Retry or Open, and glide to their new place
+- **Agent Inbox (Clean)** (`agent-inbox-clean.tsx`) – All your background agent tasks in one calm list – live clocks and status tags, filter tabs with rolling counts, rows that unfold to the last steps with Approve, Reject, Retry or Open, and glide to their new place
+- **Agent Lanes** (`agent-lanes.tsx`) – Where every agent is right now – a live timeline with a lane per agent, tasks growing into “now”, hand-offs drawn between agents and approvals right on the block
+- **Agent Lanes (Clean)** (`agent-lanes-clean.tsx`) – Where every agent is right now – a live timeline with a lane per agent, tasks growing into “now”, hand-offs drawn between agents and approvals right on the block
+- **Agent Ledger** (`agent-ledger.tsx`) – Everything an agent changed in your systems, each change with an undo – before and after per row, and pointing at Undo shows what builds on it: what would be undone too, and what can't be taken back
+- **Agent Ledger (Clean)** (`agent-ledger-clean.tsx`) – Everything an agent changed in your systems, each change with an undo – before and after per row, and pointing at Undo shows what builds on it: what would be undone too, and what can't be taken back
+- **Agent Plan** (`agent-plan.tsx`) – An agent's step-by-step plan to review before it runs – rename, drag to reorder, remove or add steps, then watch each one run with live timers and retry from a failed step
+- **Agent Plan (Clean)** (`agent-plan-clean.tsx`) – An agent's step-by-step plan to review before it runs – rename, drag to reorder, remove or add steps, then watch each one run with live timers and retry from a failed step
+- **Agent Queue** (`agent-queue.tsx`) – The work waiting for your agents, and how fast it moves – jobs drop into a live queue, glide into free worker slots as growing bars and land in Done or Failed, while a depth chart shows the backlog build up when a rate limit pauses the workers and drain when they resume
+- **Agent Queue (Clean)** (`agent-queue-clean.tsx`) – The work waiting for your agents, and how fast it moves – jobs drop into a live queue, glide into free worker slots as growing bars and land in Done or Failed, while a depth chart shows the backlog build up when a rate limit pauses the workers and drain when they resume
+- **Agent Steering** (`agent-steering.tsx`) – Steer an agent while it works – queue a note for the next step and watch it glide into the plan when the agent picks it up, or interrupt right away
+- **Agent Steering (Clean)** (`agent-steering-clean.tsx`) – Steer an agent while it works – queue a note for the next step and watch it glide into the plan when the agent picks it up, or interrupt right away
+- **Agent Tree** (`agent-tree.tsx`) – Who started whom – an orchestrator and its sub-agents as a live tree, with status, cost and time on every card, costs rolling up each branch, and branches that fold to one line
+- **Agent Tree (Clean)** (`agent-tree-clean.tsx`) – Who started whom – an orchestrator and its sub-agents as a live tree, with status, cost and time on every card, costs rolling up each branch, and branches that fold to one line
+- **AI Answer** (`ai-answer.tsx`) – Streamed answer with source cards, citation chips that preview their source, copy, regenerate, feedback and follow-ups
+- **AI Answer (Clean)** (`ai-answer-clean.tsx`) – Streamed answer with source cards, citation chips that preview their source, copy, regenerate, feedback and follow-ups
+- **Approval Card** (`approval-card.tsx`) – An agent asks before it acts – risk badge, preview, Approve and Deny with shortcuts, a pausing countdown, and a smooth morph into a resolved row
+- **Approval Card (Clean)** (`approval-card-clean.tsx`) – An agent asks before it acts – risk badge, preview, Approve and Deny with shortcuts, a pausing countdown, and a smooth morph into a resolved row
+- **Autonomy Dial** (`autonomy-dial.tsx`) – How much an agent may do on its own – a three-stop dial, and its real actions gliding between “Runs on its own” and “Asks you first”, with a lock for what always asks
+- **Autonomy Dial (Clean)** (`autonomy-dial-clean.tsx`) – How much an agent may do on its own – a three-stop dial, and its real actions gliding between “Runs on its own” and “Asks you first”, with a lock for what always asks
+- **Billing Schedule** (`billing-schedule.tsx`) – Build a billing phase – start date, duration, products with repeats and timing, discount, minimum and live totals
+- **Billing Schedule (Clean)** (`billing-schedule-clean.tsx`) – Build a billing phase – start date, duration, products with repeats and timing, discount, minimum and live totals
+- **Breakdown Chart** (`breakdown-chart.tsx`) – Stacked bar chart with measure, slice and segment pickers, a hover breakdown and a linked table
+- **Breakdown Chart (Clean)** (`breakdown-chart-clean.tsx`) – Stacked bar chart with measure, slice and segment pickers, a hover breakdown and a linked table
+- **Button** (`button.tsx`) – Primary, secondary, ghost and destructive buttons with icons, sizes and a shimmering loading state
+- **Button (Clean)** (`button-clean.tsx`) – Primary, secondary, ghost and destructive buttons with icons, sizes and a shimmering loading state
+- **Change Summary** (`change-summary.tsx`) – What moved since last time – one metric per row with a colored trend
+- **Change Summary (Clean)** (`change-summary-clean.tsx`) – What moved since last time – one metric per row with a colored trend
+- **Chat Composer** (`chat-composer.tsx`) – Prompt composer with model picker, voice input, app connections and approval request
+- **Chat Composer (Clean)** (`chat-composer-clean.tsx`) – Prompt composer with model picker, voice input, app connections and approval request
+- **Cited Answer** (`cited-answer.tsx`) – An AI answer wired to its sources – point at a citation to light up its sentence and source, click to unfold the quoted passage with the matching words marked
+- **Cited Answer (Clean)** (`cited-answer-clean.tsx`) – An AI answer wired to its sources – point at a citation to light up its sentence and source, click to unfold the quoted passage with the matching words marked
+- **Combobox** (`combobox.tsx`) – Pick one or many from a searchable, grouped list – chips with avatars, highlighted matches, create-on-the-fly and full keyboard support
+- **Combobox (Clean)** (`combobox-clean.tsx`) – Pick one or many from a searchable, grouped list – chips with avatars, highlighted matches, create-on-the-fly and full keyboard support
+- **Command Menu** (`command-menu.tsx`) – Search and run anything from one field – tool actions with logos and ⌘1–⌘5, everyday commands with icons
+- **Command Menu (Clean)** (`command-menu-clean.tsx`) – Search and run anything from one field – tool actions with logos and ⌘1–⌘5, everyday commands with icons
+- **Comment Thread** (`comment-thread.tsx`) – One comment with replies – an assistant reports what it did, folds open details and answers @mentions
+- **Comment Thread (Clean)** (`comment-thread-clean.tsx`) – One comment with replies – an assistant reports what it did, folds open details and answers @mentions
+- **Comments Panel** (`comments-panel.tsx`) – Comment feed with filters, runnable /edit commands, resolve and a composer
+- **Comments Panel (Clean)** (`comments-panel-clean.tsx`) – Comment feed with filters, runnable /edit commands, resolve and a composer
+- **Compact Breakdown** (`compact-breakdown.tsx`) – A total split into its parts in one small card – numbers roll, the bar glides and the ranked rows trade places when the period changes
+- **Compact Breakdown (Clean)** (`compact-breakdown-clean.tsx`) – A total split into its parts in one small card – numbers roll, the bar glides and the ranked rows trade places when the period changes
+- **Conflict Radar** (`conflict-radar.tsx`) – Agents working on their own branches at once, and where they get in each other's way – a row per file and a column per agent, a line between the agents that changed the same lines, each agent's way in one sentence to pick from, and Merge once all are settled
+- **Conflict Radar (Clean)** (`conflict-radar-clean.tsx`) – Agents working on their own branches at once, and where they get in each other's way – a row per file and a column per agent, a line between the agents that changed the same lines, each agent's way in one sentence to pick from, and Merge once all are settled
+- **Context Map** (`context-map.tsx`) – What fills an agent's context window, as a living treemap – system prompt, tools, memory, every file, the chat and tool results as tiles that glide as it grows, the free space dashed, and compaction squeezing old turns into a summary
+- **Context Map (Clean)** (`context-map-clean.tsx`) – What fills an agent's context window, as a living treemap – system prompt, tools, memory, every file, the chat and tool results as tiles that glide as it grows, the free space dashed, and compaction squeezing old turns into a summary
+- **Context Window** (`context-window.tsx`) – What fills the model's context, as a field of cells – hover a part to light it up, remove files, and compact the conversation while its cells shimmer and clear
+- **Context Window (Clean)** (`context-window-clean.tsx`) – What fills the model's context, as a field of cells – hover a part to light it up, remove files, and compact the conversation while its cells shimmer and clear
+- **Data Table** (`data-table.tsx`) – Spreadsheet-style table: select cells and ranges, edit in place, copy and paste, undo and sort
+- **Data Table (Clean)** (`data-table-clean.tsx`) – Spreadsheet-style table: select cells and ranges, edit in place, copy and paste, undo and sort
+- **Date Range Picker** (`date-range-picker.tsx`) – Presets and two calendars with a hover preview, comparison with the previous period or year, full keyboard control
+- **Date Range Picker (Clean)** (`date-range-picker-clean.tsx`) – Presets and two calendars with a hover preview, comparison with the previous period or year, full keyboard control
+- **Decision Inbox** (`decision-inbox.tsx`) – Open decisions with two quick answers each – answered ones confirm and fold away
+- **Decision Inbox (Clean)** (`decision-inbox-clean.tsx`) – Open decisions with two quick answers each – answered ones confirm and fold away
+- **Decision Tree** (`decision-tree.tsx`) – An agent stuck on a decision lays out its options as a tree – the consequences of each branch, the risky ones marked, its own pick highlighted – and you choose a path or write your own
+- **Decision Tree (Clean)** (`decision-tree-clean.tsx`) – An agent stuck on a decision lays out its options as a tree – the consequences of each branch, the risky ones marked, its own pick highlighted – and you choose a path or write your own
+- **Delegate Board** (`delegate-board.tsx`) – Hand work to your agents by dragging it onto them – each agent previews its new “busy until” time, or switch to Auto and every new task goes to whoever is free first
+- **Delegate Board (Clean)** (`delegate-board-clean.tsx`) – Hand work to your agents by dragging it onto them – each agent previews its new “busy until” time, or switch to Auto and every new task goes to whoever is free first
+- **Dropzone** (`dropzone.tsx`) – Drag files in and watch them upload – fanning documents, colored type badges, progress with time left, errors with retry
+- **Dropzone (Clean)** (`dropzone-clean.tsx`) – Drag files in and watch them upload – fanning documents, colored type badges, progress with time left, errors with retry
+- **Email Draft** (`email-draft.tsx`) – Agent-written email for review – switch recipient and tone, edit inline, remove the attachment, send or discard with undo
+- **Email Draft (Clean)** (`email-draft-clean.tsx`) – Agent-written email for review – switch recipient and tone, edit inline, remove the attachment, send or discard with undo
+- **Experiment Card** (`experiment-card.tsx`) – An A/B test in two lines that quietly unfolds on hover – variants linked to a tiny chart, a metric switch with rolling numbers, and a winner you pick with a click
+- **Experiment Card (Clean)** (`experiment-card-clean.tsx`) – An A/B test in two lines that quietly unfolds on hover – variants linked to a tiny chart, a metric switch with rolling numbers, and a winner you pick with a click
+- **Fallback Chain** (`fallback-chain.tsx`) – One request finding a model that answers, as a small flow diagram – the request branches out to each model in its fallback order, a light runs to the one being tried, failed branches break red, and the one that answers runs on to the response
+- **Fallback Chain (Clean)** (`fallback-chain-clean.tsx`) – One request finding a model that answers, as a small flow diagram – the request branches out to each model in its fallback order, a light runs to the one being tried, failed branches break red, and the one that answers runs on to the response
+- **Fan-out Grid** (`fan-out-grid.tsx`) – One agent hands a big job to many workers – every task a cell on a live grid that fills in as they get through it, with retries, failures, cost and the time left, and the details of any task on hover
+- **Fan-out Grid (Clean)** (`fan-out-grid-clean.tsx`) – One agent hands a big job to many workers – every task a cell on a live grid that fills in as they get through it, with retries, failures, cost and the time left, and the details of any task on hover
+- **Filter Menu** (`filter-menu.tsx`) – Grouped filters with removable chips, collapsible checkbox groups, Clear all and full keyboard control
+- **Filter Menu (Clean)** (`filter-menu-clean.tsx`) – Grouped filters with removable chips, collapsible checkbox groups, Clear all and full keyboard control
+- **Inline Diff** (`inline-diff.tsx`) – AI edits to prose shown inline – struck and added words you accept or reject one by one, with keys, a popover and undo
+- **Inline Diff (Clean)** (`inline-diff-clean.tsx`) – AI edits to prose shown inline – struck and added words you accept or reject one by one, with keys, a popover and undo
+- **Integration Picker** (`integration-picker.tsx`) – Integrations page of a command menu – search, a list of services and the picked one with its connection on two tiles
+- **Integration Picker (Clean)** (`integration-picker-clean.tsx`) – Integrations page of a command menu – search, a list of services and the picked one with its connection on two tiles
+- **Integration Settings** (`integration-settings.tsx`) – Settings card for a connected service – on/off switch, API key, validated site address, time zone and a save bar
+- **Integration Settings (Clean)** (`integration-settings-clean.tsx`) – Settings card for a connected service – on/off switch, API key, validated site address, time zone and a save bar
+- **KPI Chart** (`kpi-chart.tsx`) – Metric card with a multi-line chart and a tooltip that follows the pointer
+- **KPI Chart (Clean)** (`kpi-chart-clean.tsx`) – Metric card with a multi-line chart and a tooltip that follows the pointer
+- **Memory Panel** (`memory-panel.tsx`) – What the assistant remembers about you, grouped and editable – a master switch, category filters, and on every memory edit in place, pause or forget with Undo on the tray
+- **Memory Panel (Clean)** (`memory-panel-clean.tsx`) – What the assistant remembers about you, grouped and editable – a master switch, category filters, and on every memory edit in place, pause or forget with Undo on the tray
+- **Message Actions** (`message-actions.tsx`) – The quiet bar under an AI message – copy turns into a check, regenerate spins and unfolds a version switcher, thumbs pop and ask why, read aloud becomes a tiny equalizer
+- **Message Actions (Clean)** (`message-actions-clean.tsx`) – The quiet bar under an AI message – copy turns into a check, regenerate spins and unfolds a version switcher, thumbs pop and ask why, read aloud becomes a tiny equalizer
+- **Model Picker** (`model-picker.tsx`) – The model menu of an AI chat – point at a model and its speed, quality and cost bars fill, switch on extended thinking and its effort unfolds, while the tray rolls the first-token time and price
+- **Model Picker (Clean)** (`model-picker-clean.tsx`) – The model menu of an AI chat – point at a model and its speed, quality and cost bars fill, switch on extended thinking and its effort unfolds, while the tray rolls the first-token time and price
+- **Notification Stack** (`notification-stack.tsx`) – Notice cards stacked behind each other – dismiss the front one to reveal the next
+- **Notification Stack (Clean)** (`notification-stack-clean.tsx`) – Notice cards stacked behind each other – dismiss the front one to reveal the next
+- **OTP Input** (`otp-input.tsx`) – The verification code field done right – a gliding focus ring, paste and SMS autofill, a calm shake on errors and a morph into Verified
+- **OTP Input (Clean)** (`otp-input-clean.tsx`) – The verification code field done right – a gliding focus ring, paste and SMS autofill, a calm shake on errors and a morph into Verified
+- **Parallel Attempts** (`parallel-attempts.tsx`) – An agent tries the same task several ways at once and the best one wins – every attempt races as a row with its model, approach and live bar, then gets a score; the best is marked and picked, and you can switch to another
+- **Parallel Attempts (Clean)** (`parallel-attempts-clean.tsx`) – An agent tries the same task several ways at once and the best one wins – every attempt races as a row with its model, approach and live bar, then gets a score; the best is marked and picked, and you can switch to another
+- **Permission Request** (`permission-request.tsx`) – An agent asks for one specific right – who, why and exactly what will happen – and you allow it once, for an hour or always; then it folds into one line with the time left and Revoke
+- **Permission Request (Clean)** (`permission-request-clean.tsx`) – An agent asks for one specific right – who, why and exactly what will happen – and you allow it once, for an hour or always; then it folds into one line with the time left and Revoke
+- **Plan vs Actual (Clean)** (`plan-vs-actual-clean.tsx`) – An agent's plan against what really happens – every step's bar grows over its dashed planned ghost, overruns turn amber, the steps after it slide right, and the expected finish moves away from the planned one
+- **Profile Menu** (`profile-menu.tsx`) – Account card with the signed-in user, menu actions and profile setup progress
+- **Profile Menu (Clean)** (`profile-menu-clean.tsx`) – Account card with the signed-in user, menu actions and profile setup progress
+- **Progress Tracker** (`progress-tracker.tsx`) – Onboarding checklist with an animated progress bar, ticks that draw themselves and auto play
+- **Progress Tracker (Clean)** (`progress-tracker-clean.tsx`) – Onboarding checklist with an animated progress bar, ticks that draw themselves and auto play
+- **Project Card** (`project-card.tsx`) – A two-line project summary that quietly unfolds on hover – a progress ring with one segment per subtask, a people filter and a status picker, all linked by hover
+- **Project Card (Clean)** (`project-card-clean.tsx`) – A two-line project summary that quietly unfolds on hover – a progress ring with one segment per subtask, a people filter and a status picker, all linked by hover
+- **Prompt Library** (`prompt-library.tsx`) – Saved prompt templates with variables – type straight into the sentence, watch the finished prompt assemble below, and use it once every variable is filled
+- **Prompt Library (Clean)** (`prompt-library-clean.tsx`) – Saved prompt templates with variables – type straight into the sentence, watch the finished prompt assemble below, and use it once every variable is filled
+- **Reaction Bar** (`reaction-bar.tsx`) – Like, comment, repost and share in one pill – icons pop and fill, counts roll in digit by digit
+- **Reaction Bar (Clean)** (`reaction-bar-clean.tsx`) – Like, comment, repost and share in one pill – icons pop and fill, counts roll in digit by digit
+- **Review Center** (`review-center.tsx`) – A focused workspace for what your agents want to do – the queue sorted by risk, one item at a time with the shaky spans marked, Approve, Edit, Reject and Skip on single keys, a stamp as each one leaves and the next one rising in
+- **Review Center (Clean)** (`review-center-clean.tsx`) – A focused workspace for what your agents want to do – the queue sorted by risk, one item at a time with the shaky spans marked, Approve, Edit, Reject and Skip on single keys, a stamp as each one leaves and the next one rising in
+- **Segmented Control** (`segmented-control.tsx`) – Switch between two to six options – a raised pill or underline that glides, stretches a little and can be dragged across, with icons, counts and badges
+- **Segmented Control (Clean)** (`segmented-control-clean.tsx`) – Switch between two to six options – a raised pill or underline that glides, stretches a little and can be dragged across, with icons, counts and badges
+- **Setup Guide** (`setup-guide.tsx`) – Onboarding panel with a progress bar and collapsible task groups that strike through when done
+- **Setup Guide (Clean)** (`setup-guide-clean.tsx`) – Onboarding panel with a progress bar and collapsible task groups that strike through when done
+- **Smart Recommendation** (`smart-recommendation.tsx`) – Suggestion card with a confidence signal, alternatives to switch to and accept with undo
+- **Smart Recommendation (Clean)** (`smart-recommendation-clean.tsx`) – Suggestion card with a confidence signal, alternatives to switch to and accept with undo
+- **Stepper Form** (`stepper-form.tsx`) – A multi-step flow for onboarding and setup – steps that fill and check off, sliding steps, a card that morphs to each step, inline validation and a success state
+- **Stepper Form (Clean)** (`stepper-form-clean.tsx`) – A multi-step flow for onboarding and setup – steps that fill and check off, sliding steps, a card that morphs to each step, inline validation and a success state
+- **Thinking Loader** (`thinking-loader.tsx`) – A small working pill for AI replies – an eight-ray spinner and a shimmering label that rolls through phases and settles on a check
+- **Thinking Loader (Clean)** (`thinking-loader-clean.tsx`) – A small working pill for AI replies – an eight-ray spinner and a shimmering label that rolls through phases and settles on a check
+- **Thinking State** (`thinking-state.tsx`) – AI working panel with a live timer, searched sources and thinking steps that appear one by one
+- **Thinking State (Clean)** (`thinking-state-clean.tsx`) – AI working panel with a live timer, searched sources and thinking steps that appear one by one
+- **Tips Panel** (`tips-panel.tsx`) – Grid of short tips with one action each – taken tips turn into a done state
+- **Tips Panel (Clean)** (`tips-panel-clean.tsx`) – Grid of short tips with one action each – taken tips turn into a done state
+- **Toaster** (`toaster.tsx`) – Calm toasts from anywhere – a stack that fans out on hover, promise toasts that morph from spinner to check, swipe to dismiss
+- **Toaster (Clean)** (`toaster-clean.tsx`) – Calm toasts from anywhere – a stack that fans out on hover, promise toasts that morph from spinner to check, swipe to dismiss
+- **Tool Call Card** (`tool-call-card.tsx`) – An agent's tool call in one line – live timer, status and summary, folds open to highlighted arguments and result with copy, retry on errors and a group that sums them up
+- **Tool Call Card (Clean)** (`tool-call-card-clean.tsx`) – An agent's tool call in one line – live timer, status and summary, folds open to highlighted arguments and result with copy, retry on errors and a group that sums them up
+- **Trace Waterfall** (`trace-waterfall.tsx`) – Where the time and money of an agent run go – every LLM call, tool call and sub-agent as a bar on a live timeline, with tokens and cost per step, the slowest call marked and branches that fold into their parent
+- **Trace Waterfall (Clean)** (`trace-waterfall-clean.tsx`) – Where the time and money of an agent run go – every LLM call, tool call and sub-agent as a bar on a live timeline, with tokens and cost per step, the slowest call marked and branches that fold into their parent
+- **Usage Meter** (`usage-meter.tsx`) – Plan usage and AI credits – a stacked credits meter by category, daily sparkline, limits and a button that speaks up near the limit
+- **Usage Meter (Clean)** (`usage-meter-clean.tsx`) – Plan usage and AI credits – a stacked credits meter by category, daily sparkline, limits and a button that speaks up near the limit
+- **Writing Assistant** (`writing-assistant.tsx`) – AI chat card with a soft gradient glow, suggestions, streaming replies and live voice dictation
+- **Writing Assistant (Clean)** (`writing-assistant-clean.tsx`) – AI chat card with a soft gradient glow, suggestions, streaming replies and live voice dictation
+
+Docs and live previews: https://www.affectui.com
