@@ -68,6 +68,8 @@ const theme = /* css */ `
 .ui-chat-composer.fm .ui-chat-composer__body { --u: min(calc(100cqw / var(--ui-cc-span, 1900)), 0.2px); }
 /* A pill fits its whole name (a model's), rather than AffectUI's width cut to the unit. */
 .ui-chat-composer.fm .ui-chat-composer__model-name { max-width: 14rem; }
+/* Menu rows as tight as the app's menus. */
+.ui-chat-composer.fm .ui-chat-composer__option { min-height: 32px; padding-block: 6px; }
 .ui-chat-composer.fm .ui-chat-composer__send[data-stop] { border-radius: calc(24 * var(--u)); }
 .ui-chat-composer.fm .fm-cc-play { width: 0; height: 0; margin-left: 12%; border-style: solid; border-width: 22% 0 22% 36%; border-color: transparent transparent transparent currentColor; }
 .ui-chat-composer.fm .fm-cc-stop { width: 42%; height: 42%; border-radius: 2px; background: currentColor; }
