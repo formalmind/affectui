@@ -98,7 +98,7 @@ export function RunCard({ steps, running, title, onPause }: { steps: Row[]; runn
 			</div>
 			{note ? <p className="line-clamp-2 text-[12px] text-muted-foreground">{note}</p> : null}
 			{calls.length ? (
-				<ToolCallGroup runningLabel="Working…" defaultOpen={running || broke > 0}>
+				<ToolCallGroup runningLabel="Working…" defaultOpen>
 					{calls.map((c, i) => {
 						const [tool] = c.call.text.split(" ");
 						const bad = failed(c.result);
