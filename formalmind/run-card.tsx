@@ -10,7 +10,31 @@ const scale = /* css */ `
 .fm-run .ui-tc__name { font-size: 13px; line-height: 20px; }
 .fm-run .ui-tc__status, .fm-run .ui-tc__time, .fm-run .ui-tc__label { font-size: 12px; line-height: 16px; }
 .fm-run .ui-tc__code { font-size: 12px; line-height: 18px; }
+/* Each step one plain line ("Ran a command ▾"): no box, no icon tile, no mono name; it opens to its details. */
+.fm-run .ui-tc { background: none; box-shadow: none; border-radius: 0; }
+.fm-run .ui-tc__head { padding: 2px 0; min-height: 0; }
+.fm-run .ui-tc__icon, .fm-run .ui-tc-group__stack { display: none; }
+.fm-run .ui-tc__name { font-family: inherit; color: hsl(var(--muted-foreground)); }
+.fm-run .ui-tc__head:hover .ui-tc__name { color: hsl(var(--foreground)); }
+.fm-run .ui-tc-group__list { gap: 0; padding-left: 0; }
 `;
+
+/** What a step did, in words: the line it shows before it is opened. */
+const VERBS: Record<string, string> = {
+	run: "Ran a command",
+	read_file: "Read a file",
+	write_file: "Wrote a file",
+	search: "Searched the code",
+	find: "Found files",
+	functions: "Listed the functions",
+	function: "Looked up a function",
+	record_finding: "Recorded a finding",
+	record_property: "Recorded a property",
+	record_report: "Recorded a report",
+	report_bug: "Reported a bug",
+	verdict: "Gave a verdict",
+};
+const verbOf = (tool: string) => VERBS[tool] ?? `Used ${tool.replace(/_/g, " ")}`;
 
 /** A step that failed: a command's non-zero exit or a tool's error (as the app's own run card decides). */
 const failed = (r?: Ev) => Boolean(r && /^(exit [1-9]|error:)/m.test(r.text));
@@ -70,15 +94,14 @@ export function RunCard({ steps, running, title, onPause }: { steps: Row[]; runn
 			{calls.length ? (
 				<ToolCallGroup runningLabel="Working…" defaultOpen={running || broke > 0}>
 					{calls.map((c, i) => {
-						const [tool, ...rest] = c.call.text.split(" ");
+						const [tool] = c.call.text.split(" ");
 						const bad = failed(c.result);
 						const state: ToolCallStatus = !c.result ? (running && i === calls.length - 1 ? "running" : "error") : bad ? "error" : "success";
 						return (
 							<ToolCallCard
 								key={i}
-								name={tool}
+								name={verbOf(tool)}
 								icon={iconOf(tool)}
-								summary={rest.join(" ")}
 								status={state}
 								args={c.call.text}
 								result={c.result?.text}
