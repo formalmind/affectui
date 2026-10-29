@@ -193,6 +193,7 @@ function TeamCard({
 	running,
 	title,
 	onPause,
+	onRetry,
 	steering,
 }: {
 	calls: Call[];
@@ -201,14 +202,19 @@ function TeamCard({
 	running: boolean;
 	title?: string;
 	onPause?: () => void;
+	onRetry?: (role: string, item?: string) => void;
 	steering?: Steering;
 }) {
 	const latest = calls.at(-1)?.call.role ?? roles[0];
+	// "swarm" (the top card) shows every agent's steps.
 	const [picked, setPicked] = useState(latest);
+	// Failures you dismissed from the tree's "failed" window.
+	const [dismissed, setDismissed] = useState<string[]>([]);
 	const agents: TreeAgent[] = roles.map((role) => {
 		const mine = calls.filter((c) => c.call.role === role);
 		const live = running && role === latest;
-		const status: TreeAgentStatus = live ? "running" : mine.some((c) => !c.result) ? "stopped" : mine.some((c) => failed(c.result)) ? "failed" : "done";
+		const broke = mine.filter((c) => failed(c.result)).at(-1);
+		const status: TreeAgentStatus = live ? "running" : mine.some((c) => !c.result) ? "stopped" : broke && !dismissed.includes(role) ? "failed" : "done";
 		const from = mine[0]?.call.at;
 		const to = live ? Date.now() : mine.at(-1)?.result?.at;
 		const steps = `${mine.length} ${mine.length === 1 ? "step" : "steps"}`;
@@ -219,6 +225,7 @@ function TeamCard({
 			task: notes.filter((n) => n.role === role).at(-1)?.text ?? (item ? `item ${item}` : ""),
 			model: from && to ? `${steps} · ${took(to - from)}` : steps,
 			status,
+			error: broke?.result?.text.split("\n").slice(0, 3).join("\n"),
 			tools: [...new Set(mine.map((c) => c.call.text.split(" ")[0]))].map((tool) => <span key={tool}>{iconOf(tool)}</span>),
 		};
 	});
@@ -229,7 +236,7 @@ function TeamCard({
 		status: running ? "running" : agents.some((a) => a.status === "failed") ? "failed" : agents.some((a) => a.status === "stopped") ? "stopped" : "done",
 		children: agents,
 	};
-	const shown = calls.filter((c) => c.call.role === picked);
+	const shown = picked === "swarm" ? calls : calls.filter((c) => c.call.role === picked);
 	return (
 		<div className="fm-run fm-team space-y-2">
 			<style href="fm-run-card" precedence="default">
@@ -245,12 +252,20 @@ function TeamCard({
 					</button>
 				</div>
 			) : null}
-			<AgentTree root={root} title="Agents" onSelect={(a) => a.id !== "swarm" && setPicked(a.id)} />
+			<AgentTree
+				root={root}
+				title="Agents"
+				onSelect={(a) => setPicked(a.id)}
+				onResolve={(a, action) => {
+					if (action === "dismiss") setDismissed((d) => [...d, a.id]);
+					if (action === "retry") onRetry?.(a.id, calls.find((c) => c.call.role === a.id)?.call.item);
+				}}
+			/>
 			{shown.length && running && steering && picked === latest ? (
 				<SteerCard calls={shown} title={agents.find((a) => a.id === picked)?.task || title || "Working"} role={picked} steering={steering} onPause={onPause} />
 			) : shown.length ? (
 				<div className="space-y-1">
-					<span style={{ color: (ROLE_COLORS as Record<string, string>)[picked] }}>{roleName(picked)}</span>
+					<span style={{ color: (ROLE_COLORS as Record<string, string>)[picked] }}>{picked === "swarm" ? "Every agent" : roleName(picked)}</span>
 					<StepGroup calls={shown} running={running && picked === latest} />
 				</div>
 			) : null}
@@ -269,18 +284,21 @@ export function RunCard({
 	running,
 	title,
 	onPause,
+	onRetry,
 	steering,
 }: {
 	steps: Row[];
 	running: boolean;
 	title?: string;
 	onPause?: () => void;
+	/** Retry from the Agents tree: an agent failed on an item. */
+	onRetry?: (role: string, item?: string) => void;
 	steering?: Steering;
 }) {
 	const calls = steps.filter((r): r is Call => "call" in r);
 	const notes = steps.filter((r): r is { note: Ev } => "note" in r).map((r) => r.note);
 	const roles = [...new Set(calls.map((c) => c.call.role))];
-	if (roles.length > 1) return <TeamCard calls={calls} notes={notes} roles={roles} running={running} title={title} onPause={onPause} steering={steering} />;
+	if (roles.length > 1) return <TeamCard calls={calls} notes={notes} roles={roles} running={running} title={title} onPause={onPause} onRetry={onRetry} steering={steering} />;
 	// The agent at work: its steps with a field to steer it.
 	if (running && steering && calls.length)
 		return (
